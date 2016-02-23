@@ -86,3 +86,10 @@ def parse_maximum_lifetime(max_life_str):
         return maximum_lifetime
     else:
         raise ValueError
+
+
+def parse_port_range(port_range):
+
+    m = re.match(r'(\d+):(\d+)', port_range)
+    if m.group(1) and m.group(2):
+        return (int(m.group(1)), int(m.group(2)))

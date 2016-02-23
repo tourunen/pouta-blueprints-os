@@ -47,6 +47,13 @@ CONFIG = {
                 'title': 'Cost multiplier (default 1.0)',
                 'default': 1.0,
             },
+            'port': {
+                'type': 'string',
+                'title': 'Port',
+                'default': '2200',
+                'pattern': '^[^a-zA-Z\\+*?\[^\]\$(){}=!<>|@#%&\/\';\".~-]+$',
+                'validationMessage': 'Ports should be integer, Multiple vals separated by space. Range like xx:xx',
+            },
             'userdata': {
                 'type': 'text',
                 'title': 'Customization script for instance after it is launched',
@@ -90,6 +97,7 @@ CONFIG = {
             'type': 'textarea',
             'title': 'Customization script for instance after it is launched'
         },
+        'port',
         'firewall_rules',
         'allow_update_client_connectivity',
     ],

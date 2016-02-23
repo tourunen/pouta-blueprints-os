@@ -4,6 +4,7 @@ from pouta_blueprints.services.openstack_service import OpenStackService
 from pouta_blueprints.drivers.provisioning import base_driver
 from pouta_blueprints.client import PBClient
 from pouta_blueprints.models import Instance
+from pouta_blueprints.utils import parse_port_range
 
 SLEEP_BETWEEN_POLLS = 3
 POLL_MAX_WAIT = 180
@@ -33,17 +34,40 @@ class OpenStackDriver(base_driver.ProvisioningDriverBase):
         instance_data = instance['instance_data']
         security_group_id = instance_data['security_group_id']
 
+        blueprint_config = pbclient.get_blueprint_description(instance['blueprint_id'])
+        config = blueprint_config['config']
         # As currently only single firewall rule can be added by the user,
         # first delete all existing rules and add the new one
         oss.clear_security_group_rules(security_group_id)
-        oss.create_security_group_rule(
-            security_group_id,
-            from_port=22,
-            to_port=22,
-            cidr="%s/32" % instance['client_ip'],
-            ip_protocol='tcp',
-            group_id=None
-        )
+
+        port_str = config['port']
+        if port_str:
+            port_str = port_str.replace(',', ' ')
+            ports = port_str.split(' ')
+            ports = filter(None, ports)
+            for port in ports:
+                if ':' in port:
+                    (from_port, to_port) = parse_port_range(port)
+                else:
+                    from_port = int(port)
+                    to_port = int(port)
+                oss.create_security_group_rule(
+                    security_group_id,
+                    from_port=from_port,
+                    to_port=to_port,
+                    cidr="%s/32" % instance['client_ip'],
+                    ip_protocol='tcp',
+                    group_id=None
+                )
+        else:
+            oss.create_security_group_rule(
+                security_group_id,
+                from_port=22,
+                to_port=22,
+                cidr="%s/32" % instance['client_ip'],
+                ip_protocol='tcp',
+                group_id=None
+            )
 
     def do_provision(self, token, instance_id):
         self.logger.debug("do_provision %s" % instance_id)
