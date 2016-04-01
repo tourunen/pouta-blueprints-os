@@ -1,5 +1,7 @@
 [![TravisCI](https://travis-ci.org/CSC-IT-Center-for-Science/pouta-blueprints.svg)](https://travis-ci.org/CSC-IT-Center-for-Science/pouta-blueprints/) [![Code Climate](https://codeclimate.com/github/CSC-IT-Center-for-Science/pouta-blueprints/badges/gpa.svg)](https://codeclimate.com/github/CSC-IT-Center-for-Science/pouta-blueprints) [![Test Coverage](https://codeclimate.com/github/CSC-IT-Center-for-Science/pouta-blueprints/badges/coverage.svg)](https://codeclimate.com/github/CSC-IT-Center-for-Science/pouta-blueprints)
 
+** This is a POC modification of PB to run on OpenShift. It does not actually do anything meaningful, yet **
+
 # Pouta Blueprints
 
 **Pouta Blueprints** is a frontend to manage cloud resources and lightweight user
